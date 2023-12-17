@@ -50,7 +50,7 @@
                     <a href="#"><img src="../images/pineappleJuice.jpg" alt="" class="admin_image"></a>
                     <p class="text-light text-center">Admin Name</p>
                 </div>
-                <div class="button text-center p-3">
+                <div class="button text-center p-5">
                     <!-- button*10>a.nav-link.text-light.bg-info.my-1 -->
                     <button class="my-3"><a href="insert_product.php" class="nav-link text-light bg-info my-1">Insert Products</a></button>
                     <button><a href="" class="nav-link text-light bg-info my-1">View Products</a></button>
