@@ -15,7 +15,7 @@
         if($result){
           echo "<script>alert('Brand has been inserted successfully')</script>";
         }
-      }      
+      }
     }
 ?>
 <h2 class="text-center">Insert Brands</h2>

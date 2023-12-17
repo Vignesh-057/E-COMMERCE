@@ -15,7 +15,7 @@
         if($result){
           echo "<script>alert('Category has been inserted successfully')</script>";
         }
-      }      
+      }
     }
 ?>
 <h2 class="text-center">Insert Categories</h2>

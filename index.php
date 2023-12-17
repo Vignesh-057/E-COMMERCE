@@ -172,8 +172,8 @@
                     $brand_id = $row_data['brand_id'];
                     // echo $brand_title;
                     echo "<li class='nav-item'>
-                    <a href='index.php?brand=$brand_id' class='nav-link text-light'>$brand_title</a>
-                  </li>";
+                            <a href='index.php?brand=$brand_id' class='nav-link text-light'>$brand_title</a>
+                          </li>";
                   }
               ?>
             </ul>
@@ -194,8 +194,8 @@
                     $category_id = $row_data['category_id'];
                     // echo $brand_title;
                     echo "<li class='nav-item'>
-                    <a href='index.php?category=$category_id' class='nav-link text-light'>$category_title</a>
-                  </li>";
+                            <a href='index.php?category=$category_id' class='nav-link text-light'>$category_title</a>
+                          </li>";
                   }
               ?>
             </ul>
