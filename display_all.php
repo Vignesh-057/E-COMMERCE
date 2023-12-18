@@ -82,7 +82,8 @@
               <!-- fetching products -->
               <?php
                   //calling function
-                  getproducts();
+                  //getproducts();
+                  get_all_product();
                   get_unique_categories();
                   get_unique_brands();
                   // $select_query = "SELECT * FROM `products` ORDER BY RAND() LIMTT 0,9";
