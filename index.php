@@ -88,7 +88,8 @@
                   get_unique_categories();
                   get_unique_brands();
                   $ip = getIPAddress();  
-                  echo 'User Real IP Address - '.$ip;
+                  //echo 'User Real IP Address - '.$ip;
+                  
                   // $select_query = "SELECT * FROM `products` ORDER BY RAND() LIMTT 0,9";
                   // $result_query = mysqli_query($con,$select_query);
                   // // $row = mysqli_fetch_assoc($result_query);
