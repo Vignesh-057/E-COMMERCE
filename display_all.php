@@ -1,6 +1,7 @@
 <?php
     include("./include/connect.php");
     include('functions/common_function.php');
+    session_start();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -36,13 +37,13 @@
                   <a class="nav-link" href="display_all.php">Products</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="#">Register</a>
+                  <a class="nav-link" href="./users_area/user_registration.php">Register</a>
                 </li>
                 <li class="nav-item">
                   <a class="nav-link" href="#">Contact</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="#"><i class="fa-solid fa-cart-shopping"></i><sup><?php cart_item();?></sup></i></a>
+                  <a class="nav-link" href="cart.php"><i class="fa-solid fa-cart-shopping"></i><sup><?php cart_item();?></sup></i></a>
                 </li>
                 <li class="nav-item">
                   <a class="nav-link" href="#">Total Price: <?php total_cart_price(); ?>/-</a>
@@ -60,12 +61,29 @@
         <!-- second child -->
         <nav class="navbar navbar-expand-lg navbar-dark bg-secondary">
           <ul class="navbar-nav me-auto">
-            <li class="nav-item">
-              <a class="nav-link" href="#">Welcome Guest</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Login</a>
-            </li>
+
+            <?php
+                if(!isset($_SESSION['username'])){
+                  echo "<li class='nav-item'>
+                          <a class='nav-link' href='#'>Welcome Guest</a>
+                        </li>";
+                }else{
+                  echo "<li class='nav-item'>
+                          <a class='nav-link' href='#'>Welcome ".$_SESSION['username']."</a>
+                        </li>";
+                }
+
+                if(!isset($_SESSION['username'])){
+                  echo "<li class='nav-item'>
+                          <a class='nav-link' href='./users_area/user_login.php'>Login</a>
+                        </li>";
+                }else{
+                  echo "<li class='nav-item'>
+                          <a class='nav-link' href='./users_area/logout.php'>Logout</a>
+                        </li>";
+                }
+            ?>
+            
           </ul>
         </nav>
 
