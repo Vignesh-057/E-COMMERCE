@@ -367,9 +367,9 @@
     $result_query = mysqli_query($con,$get_details);
     while($row_query=mysqli_fetch_array($result_query)){
       $user_id = $row_query['user_id'];
-      if(!isset($_GEt['edit_account'])){
-        if(!isset($_GEt['my_orders'])){
-          if(!isset($_GEt['delete_account'])){
+      if(!isset($_GET['edit_account'])){
+        if(!isset($_GET['my_orders'])){
+          if(!isset($_GET['delete_account'])){
             $get_orders="SELECT * FROM `user_orders` WHERE user_id=$user_id and order_status='pending'";
             $result_orders_query = mysqli_query($con,$get_orders);
             $row_count = mysqli_num_rows($result_orders_query);

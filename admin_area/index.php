@@ -1,3 +1,7 @@
+<?php
+    include("../include/connect.php");
+    include('../functions/common_function.php');
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,10 +19,18 @@
             width: 100px;
             object-fit: contain;
         }
-        .footer{
+        /* .footer{
             position: absolute;
             bottom: 0;
-        }
+        } */
+        body{
+          overflow-x: hidden;
+      }
+      .product_img{
+        width: 100px;
+        object-fit: contain;
+
+      }
     </style>
 </head>
 <body>
@@ -53,14 +65,14 @@
                 <div class="button text-center p-5">
                     <!-- button*10>a.nav-link.text-light.bg-info.my-1 -->
                     <button class="my-3"><a href="insert_product.php" class="nav-link text-light bg-info my-1">Insert Products</a></button>
-                    <button><a href="" class="nav-link text-light bg-info my-1">View Products</a></button>
+                    <button><a href="index.php?view_products" class="nav-link text-light bg-info my-1">View Products</a></button>
                     <button><a href="index.php?insert_category" class="nav-link text-light bg-info my-1">Insert Categories</a></button>
-                    <button><a href="" class="nav-link text-light bg-info my-1">View Categories</a></button>
+                    <button><a href="index.php?view_categories" class="nav-link text-light bg-info my-1">View Categories</a></button>
                     <button><a href="index.php?insert_brand" class="nav-link text-light bg-info my-1">Insert Brands</a></button>
-                    <button><a href="" class="nav-link text-light bg-info my-1">View Brands</a></button>
-                    <button><a href="" class="nav-link text-light bg-info my-1">All Orders</a></button>
-                    <button><a href="" class="nav-link text-light bg-info my-1">All Payments</a></button>
-                    <button><a href="" class="nav-link text-light bg-info my-1">List Users</a></button>
+                    <button><a href="index.php?view_brands" class="nav-link text-light bg-info my-1">View Brands</a></button>
+                    <button><a href="index.php?list_orders" class="nav-link text-light bg-info my-1">All Orders</a></button>
+                    <button><a href="index.php?list_payments" class="nav-link text-light bg-info my-1">All Payments</a></button>
+                    <button><a href="index.php?list_users" class="nav-link text-light bg-info my-1">List Users</a></button>
                     <button><a href="" class="nav-link text-light bg-info my-1">Logout</a></button>
                 </div>
             </div>
@@ -75,13 +87,52 @@
                 if(isset($_GET['insert_brand'])){
                     include('insert_brands.php');
                 }
+                if(isset($_GET['view_products'])){
+                    include('view_products.php');
+                }
+                if(isset($_GET['edit_products'])){
+                    include('edit_products.php');
+                }
+                if(isset($_GET['delete_product'])){
+                    include('delete_product.php');
+                }
+                if(isset($_GET['view_categories'])){
+                    include('view_categories.php');
+                }
+                if(isset($_GET['view_brands'])){
+                    include('view_brands.php');
+                }
+                if(isset($_GET['edit_category'])){
+                    include('edit_category.php');
+                }
+                if(isset($_GET['edit_brands'])){
+                    include('edit_brands.php');
+                }
+                if(isset($_GET['delete_category'])){
+                    include('delete_category.php');
+                }
+                if(isset($_GET['delete_brands'])){
+                    include('delete_brands.php');
+                }
+                if(isset($_GET['list_orders'])){
+                    include('list_orders.php');
+                }
+                if(isset($_GET['list_payments'])){
+                    include('list_payments.php');
+                }
+                if(isset($_GET['list_users'])){
+                    include('list_users.php');
+                }
             ?>
         </div>
 
         <!-- last child -->
-        <div class="bg-info p-3 text-center footer">
+        <!-- <div class="bg-info p-3 text-center footer">
           <p>All rights reserved ©- Designed by Vignesh-2023</p>
-        </div>
+        </div> -->
+            <?php
+                include('../include/footer.php');
+            ?>
     </div>
     
 
@@ -89,5 +140,8 @@
 
     <!-- js link -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>               
 </body>
 </html>

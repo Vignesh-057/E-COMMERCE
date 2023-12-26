@@ -34,6 +34,7 @@
             $result_query = mysqli_query($con,$insert_products);
             if($result_query){
                 echo "<script>alert('Product successfully inserted')</script>";
+                echo "<script>window.open('./index.php?view_products','_self')</script>";
             }
 
         }

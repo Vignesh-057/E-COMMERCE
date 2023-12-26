@@ -28,6 +28,11 @@
             /* height: 90%; */
             object-fit: contain;
         }
+        .edit_img{
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+        }
     </style>
   </head>
 <body>
@@ -141,9 +146,18 @@
                 </ul>
 
             </div>
-            <div class="col-md-10">
+            <div class="col-md-10 text-center">
                 <?php
                     get_user_order_details();
+                    if(isset($_GET['edit_account'])){
+                        include('edit_account.php');
+                    }
+                    if(isset($_GET['my_orders'])){
+                        include('user_order.php');
+                    }
+                    if(isset($_GET['delete_account'])){
+                        include('delete_account.php');
+                    }
                 ?>
             </div>
         </div>
