@@ -2,6 +2,15 @@
     include("./include/connect.php");
     include('functions/common_function.php');
     session_start();
+    // $username123 = $_SESSION['username'];
+    // echo $username123;
+
+    // $user__name = $_SESSION['username'];
+    // $select_id = "SELECT * FROM `user_table` WHERE username='$user__name'";
+    // $result_id = mysqli_query($con,$select_id);
+    // $fetch_id = mysqli_fetch_assoc($result_id);
+    // $usser_id = $fetch_id['user_id'];
+    // echo $usser_id;
 ?>
 <!DOCTYPE html>
 <html lang="en">

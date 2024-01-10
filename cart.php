@@ -109,10 +109,23 @@
                             <!-- php code to display dynamic data-->
                             <?php
                                 global $con;
-                                $get_ip_address = getIPAddress();
-                                $total_price = 0;
-                                $cart_query = "SELECT * FROM `cart_details` WHERE ip_address = '$get_ip_address'";
-                                $result = mysqli_query($con,$cart_query);
+                                if(!isset($_SESSION['username'])){
+                                  $total_price = 0;
+                                  $cart_query = "SELECT * FROM `cart_details` WHERE user_id = 0";
+                                  $result = mysqli_query($con,$cart_query);
+                                }
+                                else{
+                                  $user__name = $_SESSION['username'];
+                                  $select_id = "SELECT * FROM `user_table` WHERE username='$user__name'";
+                                  $result_id = mysqli_query($con,$select_id);
+                                  $fetch_id = mysqli_fetch_assoc($result_id);
+                                  $usser_id = $fetch_id['user_id'];
+                                  $get_ip_address = getIPAddress();
+                                  
+                                  $total_price = 0;
+                                  $cart_query = "SELECT * FROM `cart_details` WHERE user_id = '$usser_id'";
+                                  $result = mysqli_query($con,$cart_query);
+                                }
                                 $count_number_of_rows = mysqli_num_rows($result);
                                 if($count_number_of_rows>0){
                                     echo " <thead>
@@ -149,7 +162,7 @@
                                     $get_ip_address = getIPAddress();
                                     if(isset($_POST['update_cart'])){
                                         $quantity = $_POST['quantity'];
-                                        $update_cart = "UPDATE `cart_details` SET quantity=$quantity WHERE ip_address='$get_ip_address'";
+                                        $update_cart = "UPDATE `cart_details` SET quantity=$quantity WHERE product_id = '$product_id'";
                                         $result_product_quantity = mysqli_query($con,$update_cart);
                                         $total_price = $total_price*$quantity;
                                     }
@@ -222,11 +235,11 @@
 
         <!-- last child -->
         <!-- include footer -->
-        <div class="fixed-bottom">
+        <!-- <div class="fixed-bottom"> -->
             <?php
                 include('./include/footer.php');
             ?>
-        </div>
+        <!-- </div> -->
         
     </div>
 

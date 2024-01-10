@@ -48,50 +48,56 @@
 </html>
 
 <?php
-    if(isset($_POST['user_login'])){
-        $user_username = $_POST['user_username'];
-        $user_password = $_POST['user_password'];
+// if(!isset($_SESSION['username'])){
+//     echo "<li class='nav-item'>
+//             <a class='nav-link' href='#'>Welcome Guest</a>
+//           </li>";
+//   }
+  $username = $_SESSION['username'];
+  echo $username;
+    // if(isset($_POST['user_login'])){
+    //     $user_username = $_POST['user_username'];
+    //     $user_password = $_POST['user_password'];
 
-        $select_query = "SELECT * FROM `user_table` WHERE username = '$user_username'";
-        $result = mysqli_query($con,$select_query);
-        $row_count = mysqli_num_rows($result);
-        $row_data = mysqli_fetch_assoc($result);
-        $usser_name = $row_data['username'];
-        $user_ip = getIPAddress();
+    //     $select_query = "SELECT * FROM `user_table` WHERE username = '$user_username'";
+    //     $result = mysqli_query($con,$select_query);
+    //     $row_count = mysqli_num_rows($result);
+    //     $row_data = mysqli_fetch_assoc($result);
+    //     $user_ip = getIPAddress();
 
-        // ////
-        // if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        //     $_SESSION['name'] = $_POST['user_username'];
+    //     // ////
+    //     // if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    //     //     $_SESSION['name'] = $_POST['user_username'];
             
-        //     if($_SESSION['name']) {
-        //         header('location: demotest.php');
-        //     }
-        // }
+    //     //     if($_SESSION['name']) {
+    //     //         header('location: demotest.php');
+    //     //     }
+    //     // }
 
 
-        // cart item
-        $select_query_cart = "SELECT * FROM `cart_details` WHERE username = '$usser_name'";
-        $select_cart = mysqli_query($con,$select_query_cart);
-        $row_count_cart = mysqli_num_rows($select_cart);
+    //     // cart item
+    //     $select_query_cart = "SELECT * FROM `cart_details` WHERE ip_address = '$user_ip'";
+    //     $select_cart = mysqli_query($con,$select_query_cart);
+    //     $row_count_cart = mysqli_num_rows($select_cart);
 
-        if($row_count>0){
-            $_SESSION['username'] = $user_username;
-            if(password_verify($user_password,$row_data['user_password'])){
-                // echo "<script>alert('Login successful')</script>";
-                if($row_count==1 and $row_count_cart==0){
-                    $_SESSION['username'] = $user_username;
-                    echo "<script>alert('Login successful')</script>";
-                    echo "<script>window.open('profile.php','_self')</script>";
-                }else{
-                    $_SESSION['username'] = $user_username;
-                    echo "<script>alert('Login successful')</script>";
-                    echo "<script>window.open('payment.php','_self')</script>";
-                }
-            }else{
-                echo "<script>alert('Invalid Credentials')</script>";
-            }
-        }else{
-            echo "<script>alert('Invalid Credentials')</script>";
-        }
-    }
+    //     if($row_count>0){
+    //         $_SESSION['username'] = $user_username;
+    //         if(password_verify($user_password,$row_data['user_password'])){
+    //             // echo "<script>alert('Login successful')</script>";
+    //             if($row_count==1 and $row_count_cart==0){
+    //                 $_SESSION['username'] = $user_username;
+    //                 echo "<script>alert('Login successful')</script>";
+    //                 echo "<script>window.open('profile.php','_self')</script>";
+    //             }else{
+    //                 $_SESSION['username'] = $user_username;
+    //                 echo "<script>alert('Login successful')</script>";
+    //                 echo "<script>window.open('payment.php','_self')</script>";
+    //             }
+    //         }else{
+    //             echo "<script>alert('Invalid Credentials')</script>";
+    //         }
+    //     }else{
+    //         echo "<script>alert('Invalid Credentials')</script>";
+    //     }
+    // }
 ?>
