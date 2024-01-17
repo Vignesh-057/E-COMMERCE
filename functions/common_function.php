@@ -298,15 +298,20 @@
 
 
   //fetching userid
-  // function userid(){
-  //   $user__name = $_SESSION['username'];
-  //   $select_id = "SELECT * FROM `user_table` WHERE username='$user__name'";
-  //   $result_id = mysqli_query($con,$select_id);
-  //   $fetch_id = mysqli_fetch_assoc($result_id);
-  //   $usser_id = $fetch_id['user_id'];
-  //   //echo $usser_id;
-  //   return $usser_id;
-  // }
+  function userid(){
+    global $con;
+    if(isset($_SESSION['username'])){
+      $user__name = $_SESSION['username'];
+      $select_id = "SELECT * FROM `user_table` WHERE username='$user__name'";
+      $result_id = mysqli_query($con,$select_id);
+      $fetch_id = mysqli_fetch_assoc($result_id);
+      $usser_id = $fetch_id['user_id'];
+      //echo $usser_id;
+      return $usser_id;
+    }else{
+      return 0;
+    }
+  }
 
 
   // cart function
@@ -321,6 +326,14 @@
         $select_query = "SELECT * FROM `cart_details` WHERE user_id=0  and product_id=$get_product_id";
         $result_query = mysqli_query($con,$select_query);
         $num_of_rows = mysqli_num_rows($result_query);
+
+        //fetch product price
+        $select_product_price = "SELECT * FROM `products` WHERE product_id = ' $get_product_id'";
+        $result_product = mysqli_query($con,$select_product_price);
+        $fetch_price = mysqli_fetch_assoc($result_product);
+        $product_price = $fetch_price['product_price'];
+
+
       }else{
         //getting user id
         $user__name = $_SESSION['username'];
@@ -333,6 +346,12 @@
         $select_query = "SELECT * FROM `cart_details` WHERE user_id=$usser_id  and product_id=$get_product_id";
         $result_query = mysqli_query($con,$select_query);
         $num_of_rows = mysqli_num_rows($result_query);
+
+        //fetch product price
+        $select_product_price = "SELECT * FROM `products` WHERE product_id = ' $get_product_id'";
+        $result_product = mysqli_query($con,$select_product_price);
+        $fetch_price = mysqli_fetch_assoc($result_product);
+        $product_price = $fetch_price['product_price'];
       }
 
       if(!isset($_SESSION['username'])){
@@ -346,7 +365,7 @@
           echo "<script>alert('This item is already exist inside cart')</script>";
           echo "<script>window.open('index.php','_self')</script>";
         }else{
-          $insert_query = "INSERT INTO `cart_details` (user_id,product_id,quantity,ip_address,username) VALUES (0,$get_product_id,0,'$get_ip_address','Guest')";
+          $insert_query = "INSERT INTO `cart_details` (user_id,product_id,quantity,ip_address,username,product_price) VALUES (0,$get_product_id,1,'$get_ip_address','Guest','$product_price')";
           $result_query = mysqli_query($con,$insert_query);
           echo "<script>alert('Item is added to cart')</script>";
           echo "<script>window.open('index.php','_self')</script>";
@@ -364,7 +383,7 @@
           echo "<script>alert('This item is already exist inside cart')</script>";
           echo "<script>window.open('index.php','_self')</script>";
         }else{
-          $insert_query = "INSERT INTO `cart_details` (user_id,product_id,quantity,ip_address,username) VALUES ($usser_id,$get_product_id,0,'$get_ip_address','$usser_name')";
+          $insert_query = "INSERT INTO `cart_details` (user_id,product_id,quantity,ip_address,username,product_price) VALUES ($usser_id,$get_product_id,1,'$get_ip_address','$usser_name','$product_price')";
           $result_query = mysqli_query($con,$insert_query);
           echo "<script>alert('Item is added to cart')</script>";
           echo "<script>window.open('index.php','_self')</script>";
@@ -423,22 +442,52 @@
   }
 
   // total price function
+  // function total_cart_price(){
+  //   global $con;
+  //   $get_ip_address = getIPAddress();
+  //   $total_price = 0;
+
+  //   $user__name = $_SESSION['username'];
+  //   $select_id = "SELECT * FROM `user_table` WHERE username='$user__name'";
+  //   $result_id = mysqli_query($con,$select_id);
+  //   $fetch_id = mysqli_fetch_assoc($result_id);
+  //   $usser_id = $fetch_id['user_id'];
+
+  //   $cart_query = "SELECT * FROM `cart_details` WHERE user_id = '$usser_id'";
+  //   $result = mysqli_query($con,$cart_query);
+  //   while($row = mysqli_fetch_array($result)){
+  //     $product_id = $row['product_id'];
+  //     $select_product_price = "SELECT * FROM `products` WHERE product_id = '$product_id'";
+  //     $result_product = mysqli_query($con,$select_product_price);
+  //     while($row_product_price = mysqli_fetch_array($result_product)){
+  //       $product_price = array($row_product_price['product_price']);
+  //       $product_values= array_sum($product_price);
+  //       $total_price += $product_values;
+  //     }
+  //   }
+  //   echo $total_price;
+  // }
+
+
+  // total price function
   function total_cart_price(){
     global $con;
-    $get_ip_address = getIPAddress();
+    $usser_id = userid();
+    // $user__name = $_SESSION['username'];
+    // $select_id = "SELECT * FROM `user_table` WHERE username='$user__name'";
+    // $result_id = mysqli_query($con,$select_id);
+    // $fetch_id = mysqli_fetch_assoc($result_id);
+    // $usser_id = $fetch_id['user_id'];
+
     $total_price = 0;
-    $cart_query = "SELECT * FROM `cart_details` WHERE ip_address = '$get_ip_address'";
+    $cart_query = "SELECT * FROM `cart_details` WHERE user_id = '$usser_id'";
     $result = mysqli_query($con,$cart_query);
-    while($row = mysqli_fetch_array($result)){
-      $product_id = $row['product_id'];
-      $select_product_price = "SELECT * FROM `products` WHERE product_id = '$product_id'";
-      $result_product = mysqli_query($con,$select_product_price);
-      while($row_product_price = mysqli_fetch_array($result_product)){
-        $product_price = array($row_product_price['product_price']);
-        $product_values= array_sum($product_price);
-        $total_price += $product_values;
-      }
+    while($row_product_price = mysqli_fetch_array($result)){
+      $product_price = array($row_product_price['quantity'] * $row_product_price['product_price']);
+      $product_values= array_sum($product_price);
+      $total_price += $product_values;
     }
+    
     echo $total_price;
   }
 

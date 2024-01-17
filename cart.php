@@ -142,31 +142,86 @@
 
                                     while($row = mysqli_fetch_array($result)){
                                         $product_id = $row['product_id'];
+
+
+                                        //// fetching quanatity form cart table for display in cart grid
+                                        if(!isset($_SESSION['username'])){
+                                        $quantity_fect_query = "SELECT * FROM `cart_details` WHERE user_id = 0 and product_id= $product_id ";
+                                        $result_fetch_quntity = mysqli_query($con,$quantity_fect_query);
+                                        $fetch_quantity = mysqli_fetch_assoc($result_fetch_quntity);
+                                        $quantity = $fetch_quantity['quantity'];
+                                        }else{
+                                          $quantity_fect_query = "SELECT * FROM `cart_details` WHERE user_id = $usser_id and product_id= $product_id ";
+                                          $result_fetch_quntity = mysqli_query($con,$quantity_fect_query);
+                                          $fetch_quantity = mysqli_fetch_assoc($result_fetch_quntity);
+                                          $quantity = $fetch_quantity['quantity'];
+
+                                        }
+
+
                                         $select_product_price = "SELECT * FROM `products` WHERE product_id = '$product_id'";
                                         $result_product = mysqli_query($con,$select_product_price);
                                         while($row_product_price = mysqli_fetch_array($result_product)){
-                                          $product_price = array($row_product_price['product_price']);
+                                          // $product_price = array($row_product_price['product_price']);
                                           $price_table = $row_product_price['product_price'];
                                           $product_title = $row_product_price['product_title'];
                                           $product_image1 = $row_product_price['product_image1'];
-                                          $product_values= array_sum($product_price);
-                                          $total_price += $product_values;
+                                          $product_iid = $row_product_price['product_id'];
+                                          // $product_values= array_sum($product_price);
+                                          // $total_price += $product_values;
                                 
                             ?>
     
                             <tr>
                                 <td><?php echo $product_title; ?></td>
                                 <td><img src="./admin_area/product_images/<?php echo $product_image1; ?>" alt="" class="cart_img"></td>
-                                <td><input type="text" name="quantity" class="form-input w-50"></td>
+                                <!-- <td><input type="text" name="quantity" class="form-input w-50"></td> -->
+                                <td><input type="text" name="quantity[<?php echo $product_id; ?>]" value="<?php echo $quantity; ?>" class="form-input w-50"></td>
+
                                 <?php
                                     $get_ip_address = getIPAddress();
+                                    // if(isset($_POST['update_cart'])){
+                                    //     $quantity = $_POST['quantity'];
+
+                                    //     $user__name = $_SESSION['username'];
+                                    //     $select_id = "SELECT * FROM `user_table` WHERE username='$user__name'";
+                                    //     $result_id = mysqli_query($con,$select_id);
+                                    //     $fetch_id = mysqli_fetch_assoc($result_id);
+                                    //     $usser_id = $fetch_id['user_id'];
+
+                                    //     $update_cart = "UPDATE `cart_details` SET quantity=$quantity WHERE product_id = '$product_id' and user_id = '$usser_id'";
+                                    //     $result_product_quantity = mysqli_query($con,$update_cart);
+                                    //     $total_price = $total_price*$quantity;
+                                    // } 
                                     if(isset($_POST['update_cart'])){
-                                        $quantity = $_POST['quantity'];
-                                        $update_cart = "UPDATE `cart_details` SET quantity=$quantity WHERE product_id = '$product_id'";
-                                        $result_product_quantity = mysqli_query($con,$update_cart);
-                                        $total_price = $total_price*$quantity;
-                                    }
-                                ?>
+                                      foreach($_POST['quantity'] as $product_id => $quantity){
+                                          // echo $_POST['quantity'];
+                                          if(!empty($quantity)) {
+                                            // Your existing update query code here
+                                            $user__name = $_SESSION['username'];
+                                            $select_id = "SELECT * FROM `user_table` WHERE username='$user__name'";
+                                            $result_id = mysqli_query($con,$select_id);
+                                            $fetch_id = mysqli_fetch_assoc($result_id);
+                                            $usser_id = $fetch_id['user_id'];
+                                            
+                                            // Perform the update query
+                                            $update_cart = "UPDATE `cart_details` SET quantity=$quantity WHERE product_id = '$product_id' AND user_id = '$usser_id'";
+                                            $result_product_quantity = mysqli_query($con,$update_cart);
+                                            
+                                            if($result_product_quantity){
+                                                // Successful update
+                                                echo "<script>window.open('cart.php','_self')</script>";
+                                            } else {
+                                                // Handle update failure
+                                                echo "<script>alert('Failed to update cart')</script>";
+                                            }
+                                          }
+                                          
+                                      }
+                                  }
+                                  
+                                  ?>
+                                
                                 <td><?php echo $price_table; ?>/-</td>
                                 <td><input type="checkbox" name="removeitem[]" value="<?php echo $product_id; ?>"></td>
                                 <td>
@@ -194,6 +249,16 @@
                             $result = mysqli_query($con,$cart_query);
                             $count_number_of_rows = mysqli_num_rows($result);
                             if($count_number_of_rows>0){
+                              $usser_id = userid();   
+                              $total_price = 0;
+                              $cart_query = "SELECT * FROM `cart_details` WHERE user_id = '$usser_id'";
+                              $result = mysqli_query($con,$cart_query);
+                              while($row_product_price = mysqli_fetch_array($result)){
+                                $product_price = array($row_product_price['quantity'] * $row_product_price['product_price']);
+                                $product_values= array_sum($product_price);
+                                $total_price += $product_values;
+                              }
+                              
                                 echo " <h4 class='px-3'>Subtotal: <strong class='text-info'> $total_price/-</strong></h4>
                                        <input type='submit' value='Continue Shopping' class='bg-info px-3 py-2 border-0 mx-3' name='continue_shopping'>
                                        <button class='bg-secondary px-3 py-2 border-0'><a href='./users_area/checkout.php' class='text-light text-decoration-none'>Checkout</a></button>";
