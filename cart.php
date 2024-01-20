@@ -109,23 +109,12 @@
                             <!-- php code to display dynamic data-->
                             <?php
                                 global $con;
-                                if(!isset($_SESSION['username'])){
-                                  $total_price = 0;
-                                  $cart_query = "SELECT * FROM `cart_details` WHERE user_id = 0";
-                                  $result = mysqli_query($con,$cart_query);
-                                }
-                                else{
-                                  $user__name = $_SESSION['username'];
-                                  $select_id = "SELECT * FROM `user_table` WHERE username='$user__name'";
-                                  $result_id = mysqli_query($con,$select_id);
-                                  $fetch_id = mysqli_fetch_assoc($result_id);
-                                  $usser_id = $fetch_id['user_id'];
-                                  $get_ip_address = getIPAddress();
-                                  
-                                  $total_price = 0;
-                                  $cart_query = "SELECT * FROM `cart_details` WHERE user_id = '$usser_id'";
-                                  $result = mysqli_query($con,$cart_query);
-                                }
+
+                                $usser_id = userid();
+                                $total_price = 0;
+                                $cart_query = "SELECT * FROM `cart_details` WHERE user_id = '$usser_id'";
+                                $result = mysqli_query($con,$cart_query);
+                                
                                 $count_number_of_rows = mysqli_num_rows($result);
                                 if($count_number_of_rows>0){
                                     echo " <thead>
@@ -145,18 +134,13 @@
 
 
                                         //// fetching quanatity form cart table for display in cart grid
-                                        if(!isset($_SESSION['username'])){
-                                        $quantity_fect_query = "SELECT * FROM `cart_details` WHERE user_id = 0 and product_id= $product_id ";
+                                        $usser_id = userid();
+                                        $quantity_fect_query = "SELECT * FROM `cart_details` WHERE user_id = $usser_id and product_id= $product_id ";
                                         $result_fetch_quntity = mysqli_query($con,$quantity_fect_query);
                                         $fetch_quantity = mysqli_fetch_assoc($result_fetch_quntity);
                                         $quantity = $fetch_quantity['quantity'];
-                                        }else{
-                                          $quantity_fect_query = "SELECT * FROM `cart_details` WHERE user_id = $usser_id and product_id= $product_id ";
-                                          $result_fetch_quntity = mysqli_query($con,$quantity_fect_query);
-                                          $fetch_quantity = mysqli_fetch_assoc($result_fetch_quntity);
-                                          $quantity = $fetch_quantity['quantity'];
 
-                                        }
+                                        
 
 
                                         $select_product_price = "SELECT * FROM `products` WHERE product_id = '$product_id'";
@@ -245,11 +229,12 @@
                     <div class="d-flex mb-5">
                         <?php
                             $get_ip_address = getIPAddress();
-                            $cart_query = "SELECT * FROM `cart_details` WHERE ip_address = '$get_ip_address'";
+                            $user_id = userid();
+                            $cart_query = "SELECT * FROM `cart_details` WHERE user_id = 'user_id'";
                             $result = mysqli_query($con,$cart_query);
                             $count_number_of_rows = mysqli_num_rows($result);
                             if($count_number_of_rows>0){
-                              $usser_id = userid();   
+                              $usser_id = userid();
                               $total_price = 0;
                               $cart_query = "SELECT * FROM `cart_details` WHERE user_id = '$usser_id'";
                               $result = mysqli_query($con,$cart_query);
