@@ -36,7 +36,7 @@
 
                     <div class="mt-4 pt-2">
                         <input type="submit" value="Login" name="user_login" class="bg-info py-2 px-3 border-0">
-                        <p class="small fw-bold mt-2 pt-1 mb-0"><a href="user_registration.php" class="text-blue text-decoration-none"> Forgot Password</a></p>
+                        <p class="small fw-bold mt-2 pt-1 mb-0"><a href="E-mail_verification/psw_recovery.php" class="text-blue text-decoration-none"> Forgot Password</a></p>
                         <p class="small fw-bold mt-2 pt-1 mb-0">Don't have an account ?<a href="user_registration.php" class="text-danger text-decoration-none"> Register</a></p>
                     </div>
 
@@ -68,31 +68,73 @@
         //         header('location: demotest.php');
         //     }
         // }
+        
+        //php malier strart
+        
+            
 
+            
+                // $username = mysqli_real_escape_string($con, trim($_POST['username']));
+                // $password = trim($_POST['password']);
+            
+                // $sql = mysqli_query($con, "SELECT * FROM login where username = '$username'");
+                // $count = mysqli_num_rows($sql);
+            
+                    if($row_count > 0){
+                        $_SESSION['username'] = $user_username;
+                        $hashpassword = $row_data["user_password"];
+                    
+                        if($row_data["status"] == 0){
+                            ?>
+                            <script>
+                                alert("Please verify your email account before login.");
+                            </script>
+                            <?php
+                        }else if(password_verify($user_password, $hashpassword)){
+                            $_SESSION['username'] = $user_username;
+                            ?>
+                            <script>
+                                alert("login in successfully");
+                                window.location.replace("../index.php");
+                            </script>
+                            <?php
+                        }else{
+                            ?>
+                            <script>
+                                alert("email or password invalid, please try again.");
+                            </script>
+                            <?php
+                        }
+                    }
+
+            
+        
+            
+        //php malier end
 
         // cart item
         $select_query_cart = "SELECT * FROM `cart_details` WHERE username = '$usser_name'";
         $select_cart = mysqli_query($con,$select_query_cart);
         $row_count_cart = mysqli_num_rows($select_cart);
 
-        if($row_count>0){
-            $_SESSION['username'] = $user_username;
-            if(password_verify($user_password,$row_data['user_password'])){
-                // echo "<script>alert('Login successful')</script>";
-                if($row_count==1 and $row_count_cart==0){
-                    $_SESSION['username'] = $user_username;
-                    echo "<script>alert('Login successful')</script>";
-                    echo "<script>window.open('profile.php','_self')</script>";
-                }else{
-                    $_SESSION['username'] = $user_username;
-                    echo "<script>alert('Login successful')</script>";
-                    echo "<script>window.open('payment.php','_self')</script>";
-                }
-            }else{
-                echo "<script>alert('Invalid Credentials')</script>";
-            }
-        }else{
-            echo "<script>alert('Invalid Credentials')</script>";
-        }
+        // if($row_count>0){
+        //     $_SESSION['username'] = $user_username;
+        //     if(password_verify($user_password,$row_data['user_password'])){
+        //         // echo "<script>alert('Login successful')</script>";
+        //         if($row_count==1 and $row_count_cart==0){
+        //             $_SESSION['username'] = $user_username;
+        //             echo "<script>alert('Login successful')</script>";
+        //             echo "<script>window.open('profile.php','_self')</script>";
+        //         }else{
+        //             $_SESSION['username'] = $user_username;
+        //             echo "<script>alert('Login successful')</script>";
+        //             echo "<script>window.open('payment.php','_self')</script>";
+        //         }
+        //     }else{
+        //         echo "<script>alert('Invalid Credentials')</script>";
+        //     }
+        // }else{
+        //     echo "<script>alert('Invalid Credentials')</script>";
+        // }
     }
 ?>

@@ -1,7 +1,7 @@
 <?php
     include("./include/connect.php");
     include('functions/common_function.php');
-    session_start();
+    @session_start();
     // $username123 = $_SESSION['username'];
     // echo $username123;
 

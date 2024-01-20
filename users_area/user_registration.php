@@ -1,3 +1,4 @@
+<?php session_start(); ?>
 <?php
     include("../include/connect.php");
     include("../functions/common_function.php");
@@ -78,32 +79,111 @@
         $user_image = $_FILES['user_image']['name'];
         $user_image_tmp = $_FILES['user_image']['tmp_name'];
         $user_ip = getIPAddress();
-         
         
-        //select query
+        ///php mailer function start
+        // <?php    
+        $email = $_POST["user_email"];
+        $password = $_POST["user_password"];
+
+		//my code;
+		$username = $_POST["user_username"];
+
         $select_query = "SELECT * FROM `user_table` WHERE username = '$user_username' or user_email = '$user_email'";
         $result = mysqli_query($con,$select_query);
         $row_count = mysqli_num_rows($result);
-        if($row_count>0){
-            echo "<script>alert('Username already and Email exist')</script>";
-        }else if($user_password!=$conf_user_password){
-            echo "<script>alert('Password do not match')</script>";
-        }else{
-            //insert query
-            move_uploaded_file($user_image_tmp,"./user_images/$user_image");
-            $insert_query = "INSERT INTO `user_table` (username, user_email, user_password, user_image, user_ip, user_address, user_mobile)
-            VALUES ('$user_username', '$user_email', '$hash_password', '$user_image', '$user_ip', '$user_address', '$user_contact')";
-            $sql_execute = mysqli_query($con,$insert_query);
-            if($sql_execute){
-                echo "<script>alert('data inserted')</script>";
+
+        if(!empty($email) && !empty($password)){
+            if($row_count > 0){
+                ?>
+                <script>
+                    alert("Username or email already exist!");
+                </script>
+                <?php
+            }else if($user_password!=$conf_user_password){
+                echo "<script>alert('Password do not match')</script>";
             }else{
-                die(mysqli_error($con));
+                $password_hash = password_hash($password, PASSWORD_BCRYPT);
+
+                //$result = mysqli_query($con, "INSERT INTO login (username, email, password, status) VALUES ('$username', '$email', '$password_hash', 0)");
+                move_uploaded_file($user_image_tmp,"./user_images/$user_image");
+                $insert_query = "INSERT INTO `user_table` (username, user_email, user_password, user_image, user_ip, user_address, user_mobile, status)
+                VALUES ('$user_username', '$user_email', '$hash_password', '$user_image', '$user_ip', '$user_address', '$user_contact', 0)";
+                $sql_execute = mysqli_query($con,$insert_query);
+
+                if($sql_execute){
+                    $otp = rand(100000,999999);
+                    $_SESSION['otp'] = $otp;
+                    $_SESSION['mail'] = $email;
+                    require "E-mail_verification/Mail/phpmailer/PHPMailerAutoload.php";
+                    $mail = new PHPMailer;
+    
+                    $mail->isSMTP();
+                    $mail->Host='smtp.gmail.com';
+                    $mail->Port=587;
+                    $mail->SMTPAuth=true;
+                    $mail->SMTPSecure='tls';
+    
+                    $mail->Username='vigneshnvz007@gmail.com';
+                    $mail->Password='qbiufkhdodhqdqlr';
+    
+                    $mail->setFrom('vigneshnvz007@gmail.com', 'OTP Verification');
+                    $mail->addAddress($_POST["user_email"]);
+    
+                    $mail->isHTML(true);
+                    $mail->Subject="Your verify code";
+                    $mail->Body="<p>Dear user, </p> <h3>Your verify OTP code is $otp <br></h3>
+                    <br><br>
+                    <p>With regrads,</p>
+                    <b>Programming with Lam</b>
+                    https://www.youtube.com/channel/UCKRZp3mkvL1CBYKFIlxjDdg";
+    
+                            if(!$mail->send()){
+                                ?>
+                                    <script>
+                                        alert("<?php echo "Register Failed, Invalid Email "?>");
+                                    </script>
+                                <?php
+                            }else{
+                                ?>
+                                <script>
+                                    alert("<?php echo "Register Successfully, OTP sent to " . $email ?>");
+                                    window.location.replace('E-mail_verification/otp.php');
+                                </script>
+                                <?php
+                            }
+                }
             }
         }
+        ///php mailer function end
+        
+        // //select query
+        // $select_query = "SELECT * FROM `user_table` WHERE username = '$user_username' or user_email = '$user_email'";
+        // $result = mysqli_query($con,$select_query);
+        // $row_count = mysqli_num_rows($result);
+        // if($row_count>0){
+        //     echo "<script>alert('Username already and Email exist')</script>";
+        // }
+        // else if($user_password!=$conf_user_password){
+        //     echo "<script>alert('Password do not match')</script>";
+        // }
+        
+        // else{
+        //     //insert query
+        //     move_uploaded_file($user_image_tmp,"./user_images/$user_image");
+        //     $insert_query = "INSERT INTO `user_table` (username, user_email, user_password, user_image, user_ip, user_address, user_mobile, status)
+        //     VALUES ('$user_username', '$user_email', '$hash_password', '$user_image', '$user_ip', '$user_address', '$user_contact', 0)";
+        //     $sql_execute = mysqli_query($con,$insert_query);
+        //     if($sql_execute){
+        //         echo "<script>alert('data inserted')</script>";
+        //     }else{
+        //         die(mysqli_error($con));
+        //     }
+        // }
 
 
         // selecting cart items
-        $select_cart_items = "SELECT * FROM `cart_details` WHERE ip_address = '$user_ip'";
+        $usser_id = userid();
+        $select_cart_items = "SELECT * FROM `cart_details` WHERE user_id = $usser_id";
         $result_cart = mysqli_query($con,$select_cart_items);
         $row_count = mysqli_num_rows($result_cart);
         if($row_count>0){
